@@ -1,15 +1,16 @@
 """
 Master project CSC8089
-main_programme.py version1. 24/8/2017
+cluster_programme.py version1. 24/8/2017
 contact:alovhaugen@gmail.com
 --------------------------------------
 
-Clustering of datasets with mixed attributes of 30000 individuals,
+Clustering of datasets with mixed attributes of 27 487 individuals,
 trainingset 16463 instances
-validation and testset
+validation and testset 5512 instances
+Each instance has 41 variables after processing the data
 
 Recommended usage:
-Settings must be changed within scripts importing from main_programme.py
+Settings must be changed within scripts importing from cluster_programme.py
 Run script from terminal to avoid lag from IDE
 Processes in R: Rscript scriptname.R
 Processes in Python: python scriptname.py
@@ -47,7 +48,7 @@ Matrix (tested with version 1.2-8)
 
 Program files
 ---------------------
-Files used in program contain sensitive information and are restricted to use by only me, Anne Lovhaugen, until 25th of August 2017, then they will be deleted. Description about the datasets are found in the dissertation. Two files with 10 rows of fake data are included in the datafiles-folder, in addition to an excelfile used for getting variabletypes.
+Files used for analysis contain sensitive information and are not appended. Two files with 10 rows of fake data are included in the datafiles-folder, in addition to an excelfile used for getting variabletypes.
 
 fakescreen.csv
 fakesurvey.csv
@@ -119,10 +120,7 @@ ground truth labels in each cluster of each clustering algorithm.
 
 Todo
 ----
-More data cleaning is needed, there are many variables still that could be interesting to use. 37 varibles are used in the clustering, 4 are added back at the end. 
-
-The program could be better structured and organized. Wanted to create classes, and a more
-interactive program, to from commandline put in a dataset or matrix with the function and analyse it.
-Optimization for speed and deciding for a specific distance metric is also needed, instead of using 2 or 3 different distance matrices. Better visualizations with simpler commands and fewer figures
-gathering the information would also be quite useful.
+Optimization for speed and deciding for a specific distance metric, instead of using 2 or 3 different distance matrices. 
+Better visualizations.
+Further procedures for data cleaning to include variables.
 """
