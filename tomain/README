@@ -1,0 +1,128 @@
+"""
+Master project CSC8089
+main_programme.py version1. 24/8/2017
+contact:alovhaugen@gmail.com
+--------------------------------------
+
+Clustering of datasets with mixed attributes of 30000 individuals,
+trainingset 16463 instances
+validation and testset
+
+Recommended usage:
+Settings must be changed within scripts importing from main_programme.py
+Run script from terminal to avoid lag from IDE
+Processes in R: Rscript scriptname.R
+Processes in Python: python scriptname.py
+
+Prerequisites
+-------------
+The scripts are tested on:
+BioPython 1.68
+Ubuntu 14.04 (trusty)
+Debian 8 (Jessie)
+R version 3.3.3
+Python version 2.7.12
+
+Python dependencies:
+SciPy (tested with version 1.19.1)
+Numpy (tested with version 1.12.1)
+Pandas (tested with version 0.14.1)
+hypertools
+seaborn (tested with verion 0.7.1)
+matplotlib (tested with version 1.4.2)
+sklearn (tested with version 0.18.1)
+
+R dependencies:
+cluster (tested with  version 2.0.6)
+MICE  (tested with version 2.30)
+VIM  (tested with version 4.7.0)
+stats  (tested with version 3.4.0)
+readr (tested with version 1.1.1)
+data.table  (tested with version 1.10.4)
+raster  (tested with version 2.5-8)
+gplots (tested with version 3.0.1)
+fastcluster (tested with version 1.1.22)
+grDevices 
+Matrix (tested with version 1.2-8)
+
+Program files
+---------------------
+Files used in program contain sensitive information and are restricted to use by only me, Anne Lovhaugen, until 25th of August 2017, then they will be deleted. Description about the datasets are found in the dissertation. Two files with 10 rows of fake data are included in the datafiles-folder, in addition to an excelfile used for getting variabletypes.
+
+fakescreen.csv
+fakesurvey.csv
+survey_vbl.xlsx
+
+Usage
+-----
+
+All steps can be run with the 'run.py' file
+
+Step 1. Process survey data - 'survey_processing.py'
+
+Function 'process_surveydata' demonstrated in pythonscript 'survey_processing.py' in folder testfiles. Imputation of survey data is done in the R script 'impute.R', but this won't work if there are more columns than rows, which is why an error message pops up. Therefore imputation in this demo is done with an initially used fillna function 'remove_missing' instead. 'impute_methods_list' of cluster_programme creates the method_array needed for imputing in impute.R script.
+Script generate two outputfiles called 'treated_survey.csv' for selected variables
+and 'nomissing_survey.csv' for imputed and treated variables.
+
+Step 2. Process screening data, merge and partition - 'merge_files.py'
+
+Functions 'process_screen', 'merge_frames' and 'partition_data from cluster_programme
+are demonstrated in 'merge_files.py' of the testfiles. This creates attributes for the screening data and create one row per ID, it is then able to be merged with the processed surveydata with 'merge_frames' function. 'partition_data' creates 3 new partitions with randomly selected rows of the dataframe. Generate output 'faketrain.csv' acting as the training dataset of our data.
+
+Step 3. Add new attributes - 'new_attributes.py'
+
+Due to the variable type, some valuable attributes are removed, to keep this information 
+in the clusters new attributes of the right type are made in the python script
+'new_attributes.py'. This adds 10 attributes to the dataset and remove all variables with 
+lists or dates. This script can only be used after the datasets from survey and screening has been merged. In addition attribute with ground truth labelling is also inserted here, creating the complete test/training or validation dataset used in the clustering from initiating to validating. Ground truth labels made in step 3 are removed for the clustering process until validation of clusters, this is 'Worst_diagnosis' attribute as well, that is the basis for ground-truth-labels.
+
+Step 4. Initial clustering - 'visualize.py'
+
+In 'visualize.py' pca and t-sne are used as an initial visualization of the high-dimensional dataset. Using euclidean distances and normalized is perhaps not optimal to scale dataset with categorical values. To make it better we can use a distance matrix. This is also helpful for other clustering algorithms
+
+Step 5. Distance measure- 'gower.R' 'matrix1n2.py' 
+
+With 'gower.R' the daisy algorithm of R's cluster package is utilized. This creates
+the distance matrix refered to as daisy-matrix or gower-matrix. The 'matrix1.py' script
+is made from cluster_programme distance_matrix() and distance_matrix2(). However, it is necessary to only use one function at the time for bigger datasets (>1000 columns). Output matrix2 is not used, 
+due in the project to the long calculationtime.
+
+Step 6. Second clustering - 'part_clust.py' 
+
+The script 'part_clust.py' create clusters from 3 different partitioning cluster algorithms: k-means, k-prototype, DBSCAN. The script utilize functions  kproto(), DBSCAN_cluster(), DBSCAN_cluster2() and kmeans_cluster(). DBSCAN_cluster2() give 3 output, one for each distance matrix.
+
+Step 7. Visualizing with distance matrix - 'visualize2.py
+
+Creating heatmap is a visualizing technique used to see cluster by hierarchical linkage.
+Output is heatmap for the distances between individuals and a dendogram for indication number of clusters. As for matrix creation, it is necessary to create heatmap, dendogram
+seperately, and use one matrix at the time for bigger datasets (>1000 columns). Cutoff of the
+cluster-tree is set to k=5. Note that all clusterlabeling is saved in different files,
+this is to not affect later clustering of the files.
+
+Step 8. Finding k, number of clusters - 'silplot.R'
+
+The k-values are so far created based on gut-feelings based on the previous visualizations.
+Another method to find the number of k is a silhouette plot. Step 6, 7 and 8 can be repeated with the best k-value for the algorithm. For DBSCAN clustering however, there is no need for a k.
+
+Step 9. Validate with quality measures -silrandindex.py
+
+Two indexes can be used to measure quality of the clusters called silhouette index and
+Rand index. Both have the optimal value of 1 and the worst value of -1. A value of
+zero means the result could happen randomly. It is used, but the numbers are not very indictive
+of what can be done to make better clusters. 
+
+Step 10. Plot variables of the clusters - 'piecharts.py' 'barplots.R'
+
+The final visualization to see the content of each cluster, the distribution of variables.
+Step 3-9 is then repeated with validation data. 'piecharts.py' also print out the frequencies of
+ground truth labels in each cluster of each clustering algorithm. 
+
+Todo
+----
+More data cleaning is needed, there are many variables still that could be interesting to use. 37 varibles are used in the clustering, 4 are added back at the end. 
+
+The program could be better structured and organized. Wanted to create classes, and a more
+interactive program, to from commandline put in a dataset or matrix with the function and analyse it.
+Optimization for speed and deciding for a specific distance metric is also needed, instead of using 2 or 3 different distance matrices. Better visualizations with simpler commands and fewer figures
+gathering the information would also be quite useful.
+"""
