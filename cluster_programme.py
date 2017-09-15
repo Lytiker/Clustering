@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-#/home/anne/Documents/gitfolder/patternclustering/finishing
+
 import pandas as pd 
 import numpy as np 
 import hypertools as hyp 
